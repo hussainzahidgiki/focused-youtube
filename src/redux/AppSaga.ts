@@ -3,9 +3,8 @@ import { getVideos, setVideos, setVideosError } from './AppSlice';
 import { AxiosResponse } from 'axios';
 import Youtube, { YoutubeChannel } from 'youtube.ts';
 
-const { GOOGLE_API_KEY } = process.env;
-const youtube = new Youtube(GOOGLE_API_KEY);
-
+const { REACT_APP_GOOGLE_API_KEY } = process.env;
+const youtube = new Youtube(REACT_APP_GOOGLE_API_KEY);
 export function requestGetVideos() {
   return youtube.channels.get('mkbhd');
 }
