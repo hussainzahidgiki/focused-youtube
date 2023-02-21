@@ -1,7 +1,10 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { YoutubeVideoSearch } from 'youtube.ts';
 import { RootState } from '../app/store';
-
+export interface ErrorType {
+  message: string;
+  statusCode: number;
+}
 export interface videoDetails {
   videoId: string;
   videoDescription: string;
@@ -13,14 +16,17 @@ export interface videoDetails {
 type AppState = {
   isFetchingVideos: boolean;
   isFetchingVideosSuccess: boolean;
-  nextPageToken: string;
+  isFetchingVideosFailed: boolean;
+  videosFetchError: ErrorType;
   videosDetails: videoDetails[];
 };
 
 const getInitialState = () => {
   return {
     isFetchingVideos: false,
-    nextPageToken: '',
+    isFetchingVideosFailed: false,
+    isFetchingVideosSuccess: false,
+    videosFetchError: {} as ErrorType,
     videosDetails: [] as videoDetails[],
   } as AppState;
 };
@@ -31,6 +37,8 @@ const appSlice = createSlice({
   reducers: {
     getVideos(state, action) {
       state.isFetchingVideos = true;
+      state.isFetchingVideosFailed = false;
+      state.isFetchingVideosSuccess = false;
     },
     setVideos(state, action) {
       let _payload = action.payload as YoutubeVideoSearch;
@@ -40,21 +48,31 @@ const appSlice = createSlice({
           videoTitle: item.snippet.title,
           channelTitle: item.snippet.channelTitle,
           videoDescription: item.snippet.description,
-          thumbnailImageUrl: item.snippet.thumbnails.default.url,
+          thumbnailImageUrl: item.snippet.thumbnails.medium.url,
         } as videoDetails;
       });
 
       const newState = {
-        nextPageToken: _payload.nextPageToken,
         videosDetails: [...state.videosDetails, ...items],
+        isFetchingVideosSuccess: true,
+        isFetchingVideos: false,
       };
 
       return { ...state, ...newState };
     },
-    setVideosError(state, action) {},
+    setVideosError(state, action) {
+      const newState = {
+        isFetchingVideosSuccess: false,
+        isFetchingVideos: false,
+        isFetchingVideosFailed: false,
+        videosFetchError: action.payload,
+      };
+
+      return { ...state, ...newState };
+    },
   },
 });
 
-export const { getVideos, setVideos, setVideosError } = appSlice.actions;
+export const { getVideos, setVideos, setVideosError} = appSlice.actions;
 export default appSlice.reducer;
 export const selectAppState = (state: RootState) => state.appState;

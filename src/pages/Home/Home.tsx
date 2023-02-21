@@ -1,39 +1,50 @@
 import { ChangeEvent, useState } from 'react';
 import SearchBar from '../../components/SearchBar/SearchBar';
-import './Home.css';
-import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVideos, selectAppState } from '../../redux/AppSlice';
 import { GetVideosPayload } from '../../redux/AppSaga';
-import Typography from '@mui/material/Typography';
+import VideoTile from '../../components/VideoTile/VideoTile';
+import { Grid } from '@mui/material';
 function Home() {
   const [searchValue, setSearchValue] = useState('');
-  const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { nextPageToken, videosDetails } = useSelector(selectAppState);
+  const { videosDetails } = useSelector(selectAppState);
 
   return (
-    <div className="Home-container">
+    <div
+      style={{
+        height: '100%',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        fontSize: 'calc(10px + 2vmin)',
+        width: '80%',
+      }}
+    >
       <SearchBar
         value={searchValue}
         onchange={(e: ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
           setSearchValue(e.target.value);
         }}
         onSubmit={() => {
-          //navigate('/watch');
           dispatch({
             type: getVideos.type,
             payload: {
               searchQuery: searchValue,
-              maxResults: 12,
-              nextPageToken: nextPageToken,
+              maxResults: 40,
             } as GetVideosPayload,
           });
         }}
       />
-      {videosDetails.map((item) => {
-        return <Typography color="white">{item.videoId}</Typography>;
-      })}
+      <Grid container rowSpacing={4} columnSpacing={4} display="flex" justifyContent="center">
+        {videosDetails.map((item) => {
+          return (
+            <Grid item xs={7} lg={4}>
+              <VideoTile details={item} />
+            </Grid>
+          );
+        })}
+      </Grid>
     </div>
   );
 }
