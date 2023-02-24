@@ -35,10 +35,11 @@ const appSlice = createSlice({
   name: 'appSlice',
   initialState: getInitialState(),
   reducers: {
-    getVideos(state, action) {
+    getVideos(state) {
       state.isFetchingVideos = true;
       state.isFetchingVideosFailed = false;
       state.isFetchingVideosSuccess = false;
+      state.videosFetchError = {} as ErrorType;
     },
     setVideos(state, action) {
       let _payload = action.payload as YoutubeVideoSearch;
@@ -64,7 +65,7 @@ const appSlice = createSlice({
       const newState = {
         isFetchingVideosSuccess: false,
         isFetchingVideos: false,
-        isFetchingVideosFailed: false,
+        isFetchingVideosFailed: true,
         videosFetchError: action.payload,
       };
 
@@ -73,6 +74,6 @@ const appSlice = createSlice({
   },
 });
 
-export const { getVideos, setVideos, setVideosError} = appSlice.actions;
+export const { getVideos, setVideos, setVideosError } = appSlice.actions;
 export default appSlice.reducer;
 export const selectAppState = (state: RootState) => state.appState;

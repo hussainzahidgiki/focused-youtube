@@ -10,7 +10,7 @@ function Watch() {
   return (
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', fontSize: 'calc(10px + 2vmin)', width: '80%' }}>
       <div style={{padding:200}}>
-        <iframe width="1213" height="682" src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
+        <iframe width="1213" height="682" title='Youtube Video' src={`https://www.youtube.com/embed/${videoId}?autoplay=1`} frameBorder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowFullScreen></iframe>
       </div>
     </div>
   );

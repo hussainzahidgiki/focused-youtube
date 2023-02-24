@@ -21,10 +21,12 @@ export function* handleGetVideos(action: { type: typeof getVideos; payload: GetV
     const response: AxiosResponse<YoutubeVideoSearch> = yield call(requestGetVideos, action.payload.searchQuery, action.payload.maxResults, action.payload.nextPageToken);
     yield put(setVideos(response));
   } catch (error: any) {
-    setVideosError({
-      message: error?.response?.data?.message,
-      statusCode: error?.response?.data?.statusCode,
-    });
+    yield put(
+      setVideosError({
+        message: error.response.data?.error?.message,
+        statusCode: error.response.data?.error?.code,
+      }),
+    );
   }
 }
 export function* appSaga() {
