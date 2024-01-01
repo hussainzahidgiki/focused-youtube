@@ -8,7 +8,7 @@ To create an application using Youtube API that only shows you the videos that y
 
 # Result
 Focused YouTube, made with React, Redux, and the Youtube API.
-Application accessible at : (https://focused-youtube.netlify.app/home)
+Application accessible at : (https://focused-youtube.netlify.app)
 
 # Installation
 ### `npm install`
